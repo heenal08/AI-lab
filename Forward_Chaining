@@ -1,0 +1,63 @@
+
+# Forward Chaining Algorithm
+
+# Knowledge Base (Facts)
+facts = {
+    "Human(Socrates)"
+}
+
+# Rules
+rules = [
+    ("Human", "Mortal")
+]
+
+
+# Forward Chaining
+def forward_chaining(facts, rules):
+
+    new_fact_added = True
+
+    while new_fact_added:
+
+        new_fact_added = False
+
+        for fact in list(facts):
+
+            for condition, conclusion in rules:
+
+                if fact.startswith(condition + "("):
+
+                    person = fact[
+                        fact.index("(") + 1:
+                        fact.index(")")
+                    ]
+
+                    new_fact = conclusion + "(" + person + ")"
+
+                    if new_fact not in facts:
+
+                        facts.add(new_fact)
+
+                        print("New Fact Derived:", new_fact)
+
+                        new_fact_added = True
+
+    return facts
+
+
+# Main program
+print("Initial Knowledge Base:")
+print(facts)
+
+# Apply forward chaining
+result = forward_chaining(facts, rules)
+
+# Prove query
+query = "Mortal(Socrates)"
+
+print("\nQuery:", query)
+
+if query in result:
+    print("Query Proved Successfully!")
+else:
+    print("Query Cannot Be Proved.")
