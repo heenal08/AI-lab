@@ -1,0 +1,44 @@
+
+# Vacuum Cleaner Agent using Python
+
+class VacuumCleanerAgent:
+
+    def __init__(self):
+        self.rooms = {
+            'A': 'Dirty',
+            'B': 'Dirty'
+        }
+        self.current_location = 'A'
+
+    def perceive(self):
+        return self.rooms[self.current_location]
+
+    def act(self):
+        if self.perceive() == 'Dirty':
+            print("Room", self.current_location, "is Dirty")
+            print("Action: Cleaning the room")
+            self.rooms[self.current_location] = 'Clean'
+
+        elif self.current_location == 'A':
+            print("Room A is Clean")
+            print("Action: Moving to Room B")
+            self.current_location = 'B'
+
+        elif self.current_location == 'B':
+            print("Room B is Clean")
+            print("Action: Moving to Room A")
+            self.current_location = 'A'
+
+    def run(self):
+        for i in range(6):
+            self.act()
+
+        print("\nFinal Room Status:")
+        print(self.rooms)
+
+
+# Create Vacuum Cleaner Agent
+agent = VacuumCleanerAgent()
+
+# Run the agent
+agent.run()
