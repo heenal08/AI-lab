@@ -1,0 +1,24 @@
+
+# Convert Logical Expression into CNF
+
+from sympy import symbols
+from sympy.logic.boolalg import (
+    Implies, And, Or, Not, to_cnf
+)
+
+# Define logical variables
+P, Q, R = symbols('P Q R')
+
+# Given logical expression:
+# P -> (Q AND R)
+
+expression = Implies(P, And(Q, R))
+
+print("Original Expression:")
+print(expression)
+
+# Convert into CNF
+cnf_expression = to_cnf(expression, simplify=True)
+
+print("\nConjunctive Normal Form (CNF):")
+print(cnf_expression)
