@@ -1,0 +1,54 @@
+
+class ModelBasedVacuumAgent:
+
+    def __init__(self):
+        # Actual environment
+        self.rooms = {
+            'A': 'Dirty',
+            'B': 'Dirty'
+        }
+
+        # Internal model (memory)
+        self.model = {
+            'A': 'Unknown',
+            'B': 'Unknown'
+        }
+
+        self.location = 'A'
+
+    def perceive(self):
+        return self.rooms[self.location]
+
+    def act(self):
+        # Update internal model
+        self.model[self.location] = self.perceive()
+
+        print("\nCurrent Location:", self.location)
+        print("Percept:", self.perceive())
+
+        if self.model[self.location] == 'Dirty':
+            print("Action: Suck (Cleaning)")
+            self.rooms[self.location] = 'Clean'
+            self.model[self.location] = 'Clean'
+
+        elif self.location == 'A':
+            print("Action: Move Right")
+            self.location = 'B'
+
+        elif self.location == 'B':
+            print("Action: Move Left")
+            self.location = 'A'
+
+        print("Internal Model:", self.model)
+
+    def run(self):
+        for i in range(6):
+            self.act()
+
+        print("\nFinal Environment:", self.rooms)
+        print("Final Model:", self.model)
+
+
+# Create and run agent
+agent = ModelBasedVacuumAgent()
+agent.run()
