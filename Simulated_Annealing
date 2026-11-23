@@ -1,0 +1,57 @@
+
+# Simulated Annealing Algorithm
+
+import random
+import math
+
+# Objective function
+def objective(x):
+    return -(x - 5) ** 2 + 25
+
+
+# Simulated Annealing
+def simulated_annealing():
+
+    current = random.uniform(0, 10)
+    temperature = 100
+    cooling_rate = 0.95
+
+    best = current
+
+    while temperature > 0.01:
+
+        # Generate a neighboring solution
+        new = current + random.uniform(-1, 1)
+
+        # Keep the value within range
+        new = max(0, min(10, new))
+
+        # Calculate change in objective value
+        delta = objective(new) - objective(current)
+
+        # Accept better solution
+        if delta > 0:
+            current = new
+
+        # Sometimes accept worse solution
+        else:
+            probability = math.exp(delta / temperature)
+
+            if random.random() < probability:
+                current = new
+
+        # Update best solution
+        if objective(current) > objective(best):
+            best = current
+
+        # Reduce temperature
+        temperature *= cooling_rate
+
+    return best
+
+
+# Main program
+result = simulated_annealing()
+
+print("Best Solution:", round(result, 4))
+print("Maximum Value:", round(objective(result), 4))
