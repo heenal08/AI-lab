@@ -1,0 +1,120 @@
+
+# 8 Puzzle using Iterative Deepening Search (IDS)
+
+# Initial state and goal state
+initial = (1, 2, 3,
+           4, 0, 6,
+           7, 5, 8)
+
+goal = (1, 2, 3,
+        4, 5, 6,
+        7, 8, 0)
+
+
+# Generate possible moves
+def get_neighbors(state):
+    neighbors = []
+
+    zero = state.index(0)
+    row, col = divmod(zero, 3)
+
+    moves = [
+        (-1, 0),  # Up
+        (1, 0),   # Down
+        (0, -1),  # Left
+        (0, 1)    # Right
+    ]
+
+    for dr, dc in moves:
+        new_row = row + dr
+        new_col = col + dc
+
+        if 0 <= new_row < 3 and 0 <= new_col < 3:
+            new_pos = new_row * 3 + new_col
+
+            new_state = list(state)
+
+            new_state[zero], new_state[new_pos] = (
+                new_state[new_pos], new_state[zero]
+            )
+
+            neighbors.append(tuple(new_state))
+
+    return neighbors
+
+
+# Depth Limited Search
+def dls(state, goal, depth, path, visited):
+
+    if state == goal:
+        return path
+
+    if depth == 0:
+        return None
+
+    for neighbor in get_neighbors(state):
+
+        if neighbor not in visited:
+            visited.add(neighbor)
+
+            result = dls(
+                neighbor,
+                goal,
+                depth - 1,
+                path + [neighbor],
+                visited
+            )
+
+            if result is not None:
+                return result
+
+            visited.remove(neighbor)
+
+    return None
+
+
+# Iterative Deepening Search
+def ids(start, goal, max_depth=50):
+
+    for depth in range(max_depth + 1):
+
+        print("Searching at depth:", depth)
+
+        visited = {start}
+
+        result = dls(
+            start,
+            goal,
+            depth,
+            [start],
+            visited
+        )
+
+        if result is not None:
+            return result
+
+    return None
+
+
+# Display solution
+def display(path):
+
+    if path is None:
+        print("Solution not found")
+        return
+
+    print("\nSolution Found!")
+    print("Total Moves:", len(path) - 1)
+
+    for step, state in enumerate(path):
+
+        print("\nStep", step)
+
+        for i in range(0, 9, 3):
+            print(state[i:i+3])
+
+
+# Main program
+solution = ids(initial, goal)
+
+display(solution)
